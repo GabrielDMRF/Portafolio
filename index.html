@@ -133,27 +133,38 @@
       visibility: hidden;
     }
 
-    .loader svg {
-      width: min(220px, 60vw);
-      height: auto;
+    .loader-content {
+      text-align: center;
+      padding: 0 1rem;
       filter: drop-shadow(0 0 16px var(--glow));
     }
 
-    .loader path {
-      fill: none;
-      stroke: var(--accent-primary);
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 240;
-      stroke-dashoffset: 240;
-      animation: draw 1400ms ease forwards;
+    .loader-phrase {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: transparent;
+      background: linear-gradient(120deg, #8f6e38 15%, #e6c98f 46%, #6d9b78 72%, #8f6e38 95%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: loaderShimmer 1300ms ease-in-out infinite;
+      margin-bottom: 0.45rem;
     }
 
-    @keyframes draw {
-      to {
-        stroke-dashoffset: 0;
-      }
+    .loader-sub {
+      color: var(--text-subtle);
+      font-size: 0.78rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    @keyframes loaderShimmer {
+      0% { background-position: 0% 50%; opacity: 0.75; }
+      50% { background-position: 100% 50%; opacity: 1; }
+      100% { background-position: 0% 50%; opacity: 0.75; }
     }
 
     /* =========================
@@ -978,10 +989,11 @@
     </filter>
   </svg>
 
-  <div class="loader" id="loader">
-    <svg viewBox="0 0 220 120" role="img" aria-label="Logo Gabriel Murillo">
-      <path d="M30 90 L70 20 L110 90 M45 62 H95 M125 90 L125 20 L165 20 Q195 20 195 46 Q195 72 165 72 L125 72"/>
-    </svg>
+  <div class="loader" id="loader" aria-live="polite">
+    <div class="loader-content">
+      <p class="loader-phrase">Forjando experiencias vivas</p>
+      <p class="loader-sub">Gabriel Murillo · Fullstack & Minecraft Developer</p>
+    </div>
   </div>
 
   <div class="noise-layer" aria-hidden="true"></div>
