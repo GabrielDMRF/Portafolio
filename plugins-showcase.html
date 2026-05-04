@@ -242,7 +242,7 @@
       box-shadow: 0 0 8px rgba(74, 124, 89, 0.5);
     }
 
-    /* Bento gallery — 4 placeholders (sustituir por GIF o capturas) */
+    /* Carrusel + lightbox — añade más <figure class="plugin-carousel__slide"> dentro del track */
     .gallery-note {
       font-size: 0.72rem;
       color: var(--text-subtle);
@@ -250,70 +250,261 @@
       opacity: 0.85;
     }
 
-    .plugin-gallery {
+    .gallery-note code {
+      font-size: 0.68rem;
+      color: var(--accent-primary);
+      word-break: break-word;
+    }
+
+    .plugin-carousel {
+      margin-top: 0.25rem;
+    }
+
+    .plugin-carousel__chrome {
       display: grid;
-      gap: 0.65rem;
-      grid-template-columns: 1.35fr 1fr;
-      grid-template-rows: minmax(140px, 1fr) minmax(140px, 1fr) auto;
+      grid-template-columns: auto 1fr auto;
+      align-items: stretch;
+      gap: 0.55rem;
     }
 
-    .plugin-gallery .media {
-      position: relative;
-      border-radius: var(--radius);
+    .plugin-carousel__viewport {
       overflow: hidden;
-      border: 1px solid rgba(200, 169, 110, 0.18);
-      background: linear-gradient(145deg, #151811, #0d0e0c);
-    }
-
-    .plugin-gallery .media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.88;
-      transition: opacity var(--ease), transform 600ms ease;
-    }
-
-    .plugin-gallery .media:hover img {
-      opacity: 1;
-      transform: scale(1.03);
-    }
-
-    .plugin-gallery .media span {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 0.5rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-main);
-      background: rgba(10, 10, 8, 0.65);
-      padding: 0.2rem 0.45rem;
-      border-radius: 6px;
+      border-radius: var(--radius);
       border: 1px solid rgba(200, 169, 110, 0.2);
+      background: linear-gradient(145deg, #151811, #0d0e0c);
+      min-height: 0;
     }
 
-    .plugin-gallery .g-a {
-      grid-column: 1;
-      grid-row: 1 / 3;
-      min-height: 280px;
+    .plugin-carousel__track {
+      display: flex;
+      transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    .plugin-gallery .g-b {
-      grid-column: 2;
-      grid-row: 1;
-      min-height: 130px;
+    .plugin-carousel__slide {
+      flex: 0 0 100%;
+      min-width: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .plugin-gallery .g-c {
-      grid-column: 2;
-      grid-row: 2;
-      min-height: 130px;
+    .plugin-carousel__zoom {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: zoom-in;
+      line-height: 0;
     }
 
-    .plugin-gallery .g-d {
-      grid-column: 1 / -1;
-      grid-row: 3;
-      min-height: 160px;
+    .plugin-carousel__zoom img {
+      width: 100%;
+      height: clamp(200px, 38vw, 320px);
+      object-fit: cover;
+      opacity: 0.92;
+      transition: opacity var(--ease), transform 500ms ease;
+    }
+
+    .plugin-carousel__zoom:hover img,
+    .plugin-carousel__zoom:focus-visible img {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    .plugin-carousel__zoom:focus-visible {
+      outline: 2px solid rgba(200, 169, 110, 0.55);
+      outline-offset: 2px;
+    }
+
+    .plugin-carousel__caption {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      padding: 0.55rem 0.75rem 0.65rem;
+      border-top: 1px solid rgba(200, 169, 110, 0.1);
+    }
+
+    .plugin-carousel__arrow {
+      align-self: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 169, 110, 0.35);
+      background: rgba(10, 10, 8, 0.75);
+      color: var(--accent-primary);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: border-color var(--ease), box-shadow var(--ease), background var(--ease);
+    }
+
+    .plugin-carousel__arrow:hover {
+      border-color: rgba(200, 169, 110, 0.65);
+      box-shadow: 0 0 18px var(--glow);
+    }
+
+    .plugin-carousel__arrow:focus-visible {
+      outline: 2px solid rgba(200, 169, 110, 0.5);
+      outline-offset: 2px;
+    }
+
+    .plugin-carousel__footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.65rem;
+      gap: 0.75rem;
+    }
+
+    .plugin-carousel__counter {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--text-subtle);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      padding-top: max(1rem, env(safe-area-inset-top));
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      background: rgba(5, 5, 4, 0.92);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 280ms ease, visibility 280ms ease;
+    }
+
+    .lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox__inner {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: min(88vh, 900px);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding-top: 2.5rem;
+    }
+
+    .lightbox__img-wrap {
+      position: relative;
+      max-height: min(78vh, 820px);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3.25rem;
+      box-sizing: border-box;
+    }
+
+    .lightbox__img {
+      max-width: 100%;
+      max-height: min(78vh, 820px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--radius);
+      border: 1px solid rgba(200, 169, 110, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox__caption {
+      font-size: 0.78rem;
+      color: var(--text-subtle);
+      text-align: center;
+      max-width: 56ch;
+    }
+
+    .lightbox__close {
+      position: absolute;
+      top: -0.25rem;
+      right: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 169, 110, 0.4);
+      background: rgba(10, 10, 8, 0.9);
+      color: var(--text-main);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: box-shadow var(--ease);
+    }
+
+    .lightbox__close:hover {
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .lightbox__nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 169, 110, 0.35);
+      background: rgba(10, 10, 8, 0.85);
+      color: var(--accent-primary);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: border-color var(--ease), box-shadow var(--ease);
+    }
+
+    .lightbox__nav:hover {
+      border-color: rgba(200, 169, 110, 0.65);
+      box-shadow: 0 0 16px var(--glow);
+    }
+
+    .lightbox__nav--prev { left: 0; }
+    .lightbox__nav--next { right: 0; }
+
+    @media (max-width: 640px) {
+      .plugin-carousel__chrome {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.6rem;
+      }
+
+      .plugin-carousel__viewport {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      .plugin-carousel__arrow--prev {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: center;
+      }
+
+      .plugin-carousel__arrow--next {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: center;
+      }
+
+      .lightbox__nav {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lightbox__img-wrap { padding: 0 2.35rem; }
+
+      .lightbox__nav--prev { left: -0.25rem; }
+      .lightbox__nav--next { right: -0.25rem; }
     }
 
     footer.page-foot {
@@ -325,24 +516,6 @@
     }
 
     @media (max-width: 768px) {
-      .plugin-gallery {
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-      }
-
-      .plugin-gallery .g-a,
-      .plugin-gallery .g-b,
-      .plugin-gallery .g-c,
-      .plugin-gallery .g-d {
-        grid-column: 1;
-        grid-row: auto;
-        min-height: 180px;
-      }
-
-      .plugin-gallery .g-a {
-        min-height: 220px;
-      }
-
       .nav-inner {
         justify-content: center;
       }
@@ -362,7 +535,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .plugin-gallery .media:hover img { transform: none; }
+      .plugin-carousel__track { transition-duration: 0.01ms !important; }
+      .plugin-carousel__zoom:hover img { transform: none; }
     }
   </style>
 </head>
@@ -421,23 +595,46 @@
           <li>Integración con economía y rangos: premios en ítems o comandos ejecutados al ganar.</li>
           <li>Anti-abuso: cooldown entre capturas y registro de quién estuvo en zona.</li>
         </ul>
-        <p class="gallery-note">Galería — sustituye estas imágenes por tus capturas o un GIF grabado en el servidor.</p>
-        <div class="plugin-gallery">
-          <div class="media g-a">
-            <img src="https://picsum.photos/seed/rc-koth-a/800/900" width="800" height="900" alt="Vista general del área KOTH" loading="lazy">
-            <span>Vista zona</span>
+        <p class="gallery-note">Carrusel — haz clic en la foto para ampliarla. Para añadir más imágenes, copia otro bloque <code>&lt;figure class="plugin-carousel__slide"&gt;</code> dentro del <code>.plugin-carousel__track</code> (GIF y PNG/JPG funcionan igual).</p>
+        <div class="plugin-carousel" data-carousel>
+          <div class="plugin-carousel__chrome">
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="plugin-carousel__viewport">
+              <div class="plugin-carousel__track">
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
+                    <img src="https://picsum.photos/seed/rc-koth-a/800/900" width="800" height="900" alt="Vista general del área KOTH" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Vista zona</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
+                    <img src="https://picsum.photos/seed/rc-koth-b/600/400" width="600" height="400" alt="Interfaz o temporizador KOTH" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Timer UI</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
+                    <img src="https://picsum.photos/seed/rc-koth-c/600/400" width="600" height="400" alt="Chat o anuncios del evento" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Anuncios</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
+                    <img src="https://picsum.photos/seed/rc-koth-d/1200/400" width="1200" height="400" alt="Momento de victoria o recompensa" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Recompensa</figcaption>
+                </figure>
+              </div>
+            </div>
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--next" aria-label="Imagen siguiente">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
           </div>
-          <div class="media g-b">
-            <img src="https://picsum.photos/seed/rc-koth-b/600/400" width="600" height="400" alt="Interfaz o temporizador KOTH" loading="lazy">
-            <span>Timer UI</span>
-          </div>
-          <div class="media g-c">
-            <img src="https://picsum.photos/seed/rc-koth-c/600/400" width="600" height="400" alt="Chat o anuncios del evento" loading="lazy">
-            <span>Anuncios</span>
-          </div>
-          <div class="media g-d">
-            <img src="https://picsum.photos/seed/rc-koth-d/1200/400" width="1200" height="400" alt="Momento de victoria o recompensa" loading="lazy">
-            <span>Recompensa</span>
+          <div class="plugin-carousel__footer">
+            <span class="plugin-carousel__counter" aria-live="polite">1 / 4</span>
           </div>
         </div>
       </div>
@@ -457,23 +654,46 @@
           <li>Límite de compra por rango Essentials / permiso y ventana de confirmación.</li>
           <li>Historial simple para staff (quién compró qué, útil contra disputas).</li>
         </ul>
-        <p class="gallery-note">Misma estructura de galería — aquí puedes poner capturas del GUI, confirmación de compra o un GIF del flujo.</p>
-        <div class="plugin-gallery">
-          <div class="media g-a">
-            <img src="https://picsum.photos/seed/rc-shop-a/800/900" width="800" height="900" alt="Menú principal de la tienda" loading="lazy">
-            <span>Menú principal</span>
+        <p class="gallery-note">Añade o quita <code>&lt;figure class="plugin-carousel__slide"&gt;</code> según necesites; el contador y las flechas se adaptan solos.</p>
+        <div class="plugin-carousel" data-carousel>
+          <div class="plugin-carousel__chrome">
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="plugin-carousel__viewport">
+              <div class="plugin-carousel__track">
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
+                    <img src="https://picsum.photos/seed/rc-shop-a/800/900" width="800" height="900" alt="Menú principal de la tienda" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Menú principal</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
+                    <img src="https://picsum.photos/seed/rc-shop-b/600/400" width="600" height="400" alt="Categoría de ítems" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Categoría</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
+                    <img src="https://picsum.photos/seed/rc-shop-c/600/400" width="600" height="400" alt="Confirmación de compra" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Confirmar</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
+                    <img src="https://picsum.photos/seed/rc-shop-d/1200/400" width="1200" height="400" alt="Saldo Vault en pantalla" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Saldo Vault</figcaption>
+                </figure>
+              </div>
+            </div>
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--next" aria-label="Imagen siguiente">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
           </div>
-          <div class="media g-b">
-            <img src="https://picsum.photos/seed/rc-shop-b/600/400" width="600" height="400" alt="Categoría de ítems" loading="lazy">
-            <span>Categoría</span>
-          </div>
-          <div class="media g-c">
-            <img src="https://picsum.photos/seed/rc-shop-c/600/400" width="600" height="400" alt="Confirmación de compra" loading="lazy">
-            <span>Confirmar</span>
-          </div>
-          <div class="media g-d">
-            <img src="https://picsum.photos/seed/rc-shop-d/1200/400" width="1200" height="400" alt="Saldo Vault en pantalla" loading="lazy">
-            <span>Saldo Vault</span>
+          <div class="plugin-carousel__footer">
+            <span class="plugin-carousel__counter" aria-live="polite">1 / 4</span>
           </div>
         </div>
       </div>
@@ -493,33 +713,197 @@
           <li>Inspección de inventario y ender chest en contexto (sin comandos crípticos).</li>
           <li>Registro de acciones exportable para servidor serio (staff accountability).</li>
         </ul>
-        <p class="gallery-note">Cuatro huecos para capturas: lista de plantillas, GUI de ban, vanish activo y vista de inventario ajeno.</p>
-        <div class="plugin-gallery">
-          <div class="media g-a">
-            <img src="https://picsum.photos/seed/rc-staff-a/800/900" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy">
-            <span>Plantillas</span>
+        <p class="gallery-note">Mismas reglas: tantas diapositivas como quieras dentro de <code>.plugin-carousel__track</code>.</p>
+        <div class="plugin-carousel" data-carousel>
+          <div class="plugin-carousel__chrome">
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="plugin-carousel__viewport">
+              <div class="plugin-carousel__track">
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
+                    <img src="https://picsum.photos/seed/rc-staff-a/800/900" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Plantillas</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
+                    <img src="https://picsum.photos/seed/rc-staff-b/600/400" width="600" height="400" alt="Formulario de ban" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Ban GUI</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
+                    <img src="https://picsum.photos/seed/rc-staff-c/600/400" width="600" height="400" alt="Indicador vanish" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Vanish</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
+                    <img src="https://picsum.photos/seed/rc-staff-d/1200/400" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy" decoding="async">
+                  </button>
+                  <figcaption class="plugin-carousel__caption">Inv / ender</figcaption>
+                </figure>
+              </div>
+            </div>
+            <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--next" aria-label="Imagen siguiente">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
           </div>
-          <div class="media g-b">
-            <img src="https://picsum.photos/seed/rc-staff-b/600/400" width="600" height="400" alt="Formulario de ban" loading="lazy">
-            <span>Ban GUI</span>
-          </div>
-          <div class="media g-c">
-            <img src="https://picsum.photos/seed/rc-staff-c/600/400" width="600" height="400" alt="Indicador vanish" loading="lazy">
-            <span>Vanish</span>
-          </div>
-          <div class="media g-d">
-            <img src="https://picsum.photos/seed/rc-staff-d/1200/400" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy">
-            <span>Inv / ender</span>
+          <div class="plugin-carousel__footer">
+            <span class="plugin-carousel__counter" aria-live="polite">1 / 4</span>
           </div>
         </div>
       </div>
     </section>
   </main>
 
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista ampliada">
+    <div class="lightbox__inner">
+      <button type="button" class="lightbox__close" aria-label="Cerrar galería">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="lightbox__img-wrap">
+        <button type="button" class="lightbox__nav lightbox__nav--prev" aria-label="Imagen anterior en grande">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <img class="lightbox__img" src="" alt="" decoding="async">
+        <button type="button" class="lightbox__nav lightbox__nav--next" aria-label="Imagen siguiente en grande">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="lightbox__caption"></p>
+    </div>
+  </div>
+
   <footer class="page-foot">
     <div class="container">
       <p>Gabriel Murillo · RealmCore muestra · <a href="index.html" style="color: var(--accent-primary); border-bottom: 1px solid rgba(200,169,110,0.35);">Volver al inicio</a></p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = lightbox.querySelector(".lightbox__img");
+      const lightboxCap = lightbox.querySelector(".lightbox__caption");
+      const btnClose = lightbox.querySelector(".lightbox__close");
+      const btnPrev = lightbox.querySelector(".lightbox__nav--prev");
+      const btnNext = lightbox.querySelector(".lightbox__nav--next");
+
+      const carouselState = new WeakMap();
+
+      function getSlides(carousel) {
+        return [...carousel.querySelectorAll(".plugin-carousel__slide")];
+      }
+
+      function slideData(slide) {
+        const img = slide.querySelector("img");
+        const cap = slide.querySelector(".plugin-carousel__caption");
+        return {
+          src: (img && (img.getAttribute("src") || img.src)) || "",
+          alt: img?.alt || "",
+          caption: cap?.textContent?.trim() || ""
+        };
+      }
+
+      function setCarouselIndex(carousel, index) {
+        const slides = getSlides(carousel);
+        if (!slides.length) return;
+        const track = carousel.querySelector(".plugin-carousel__track");
+        const counter = carousel.querySelector(".plugin-carousel__counter");
+        const i = ((index % slides.length) + slides.length) % slides.length;
+        carouselState.set(carousel, { i: i });
+        if (track) track.style.transform = "translateX(-" + i * 100 + "%)";
+        if (counter) counter.textContent = i + 1 + " / " + slides.length;
+      }
+
+      function updateLightboxFromCarousel(carousel) {
+        const s = carouselState.get(carousel);
+        const slides = getSlides(carousel);
+        if (!s || !slides.length || !slides[s.i]) return;
+        const d = slideData(slides[s.i]);
+        lightboxImg.src = d.src;
+        lightboxImg.alt = d.alt;
+        lightboxCap.textContent = d.caption;
+      }
+
+      let sourceCarousel = null;
+
+      function openLightbox(carousel, index) {
+        sourceCarousel = carousel;
+        setCarouselIndex(carousel, index);
+        updateLightboxFromCarousel(carousel);
+        lightbox.classList.add("is-open");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        btnClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        sourceCarousel = null;
+      }
+
+      function lightboxStep(delta) {
+        if (!sourceCarousel) return;
+        const slides = getSlides(sourceCarousel);
+        if (!slides.length) return;
+        const s = carouselState.get(sourceCarousel) || { i: 0 };
+        setCarouselIndex(sourceCarousel, s.i + delta);
+        updateLightboxFromCarousel(sourceCarousel);
+      }
+
+      document.querySelectorAll("[data-carousel]").forEach(function (carousel) {
+        const slides = getSlides(carousel);
+        const prev = carousel.querySelector(".plugin-carousel__arrow--prev");
+        const next = carousel.querySelector(".plugin-carousel__arrow--next");
+
+        setCarouselIndex(carousel, 0);
+
+        prev?.addEventListener("click", function () {
+          const s = carouselState.get(carousel) || { i: 0 };
+          setCarouselIndex(carousel, s.i - 1);
+        });
+
+        next?.addEventListener("click", function () {
+          const s = carouselState.get(carousel) || { i: 0 };
+          setCarouselIndex(carousel, s.i + 1);
+        });
+
+        slides.forEach(function (slide, i) {
+          slide.querySelector(".plugin-carousel__zoom")?.addEventListener("click", function () {
+            openLightbox(carousel, i);
+          });
+        });
+      });
+
+      btnClose?.addEventListener("click", closeLightbox);
+
+      lightbox?.addEventListener("click", function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      btnPrev?.addEventListener("click", function (e) {
+        e.stopPropagation();
+        lightboxStep(-1);
+      });
+
+      btnNext?.addEventListener("click", function (e) {
+        e.stopPropagation();
+        lightboxStep(1);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (!lightbox.classList.contains("is-open")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") lightboxStep(-1);
+        if (e.key === "ArrowRight") lightboxStep(1);
+      });
+    })();
+  </script>
 </body>
 </html>
