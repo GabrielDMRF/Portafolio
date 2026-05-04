@@ -604,6 +604,7 @@
 
     .project-actions {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.65rem;
       margin-top: auto;
     }
@@ -622,6 +623,21 @@
     .btn-link:hover {
       border-color: rgba(200, 169, 110, 0.65);
       box-shadow: 0 0 16px var(--glow);
+    }
+
+    .btn-link--showcase {
+      border-color: rgba(200, 169, 110, 0.45);
+      background: rgba(200, 169, 110, 0.08);
+    }
+
+    .btn-link--showcase:hover {
+      background: rgba(200, 169, 110, 0.14);
+    }
+
+    .btn-link--soon {
+      opacity: 0.42;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     /* =========================
@@ -1130,6 +1146,7 @@
                 <span class="badge">REST API</span>
               </div>
               <div class="project-actions">
+                <span class="btn-link btn-link--soon" title="Próximamente">Ver ejemplos</span>
                 <a href="#" class="btn-link">Live</a>
                 <a href="#" class="btn-link">GitHub</a>
               </div>
@@ -1151,6 +1168,7 @@
                 <span class="badge">Docker</span>
               </div>
               <div class="project-actions">
+                <a href="plugins-showcase.html" class="btn-link btn-link--showcase">Ver ejemplos</a>
                 <a href="#" class="btn-link">Live</a>
                 <a href="#" class="btn-link">GitHub</a>
               </div>
@@ -1172,6 +1190,7 @@
                 <span class="badge">CI/CD</span>
               </div>
               <div class="project-actions">
+                <span class="btn-link btn-link--soon" title="Próximamente">Ver ejemplos</span>
                 <a href="#" class="btn-link">Live</a>
                 <a href="#" class="btn-link">GitHub</a>
               </div>

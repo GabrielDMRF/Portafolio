@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealmCore · Plugins de muestra | Gabriel Murillo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23c8a96e'/%3E%3Cstop offset='100%25' stop-color='%234a7c59'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0a08'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Cormorant Garamond, serif' font-size='30' fill='url(%23g)'%3EGM%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0a0a08;
+      --bg-soft: #12120e;
+      --accent-primary: #c8a96e;
+      --accent-secondary: #4a7c59;
+      --text-main: #e8dcc8;
+      --text-subtle: #7a6e5a;
+      --glow: rgba(200, 169, 110, 0.15);
+      --line-gold: rgba(200, 169, 110, 0.2);
+      --radius: 18px;
+      --max-w: 1100px;
+      --ease: 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: radial-gradient(circle at 15% 10%, #191711 0%, var(--bg-soft) 35%, var(--bg-main) 70%);
+      color: var(--text-main);
+      font-family: "DM Mono", monospace;
+      line-height: 1.7;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(200, 169, 110, 0.05), transparent 45%),
+        radial-gradient(circle at 85% 70%, rgba(74, 124, 89, 0.09), transparent 40%);
+      z-index: 1;
+    }
+
+    .noise-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.14;
+      z-index: 2;
+      background: rgba(10, 10, 8, 0.4);
+      filter: url(#noiseFilter);
+    }
+
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(92%, var(--max-w));
+      margin: 0 auto;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Header */
+    .page-head {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(200, 169, 110, 0.12);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(10, 10, 8, 0.75);
+      backdrop-filter: blur(12px);
+    }
+
+    .page-head-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      border: 1px solid var(--line-gold);
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      transition: color var(--ease), border-color var(--ease), box-shadow var(--ease);
+    }
+
+    .back-link:hover {
+      color: var(--text-main);
+      border-color: rgba(200, 169, 110, 0.5);
+      box-shadow: 0 0 18px var(--glow);
+    }
+
+    .plugin-jump {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .plugin-jump a {
+      color: var(--text-subtle);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all var(--ease);
+    }
+
+    .plugin-jump a:hover {
+      color: var(--accent-primary);
+      border-color: rgba(200, 169, 110, 0.25);
+    }
+
+    /* Hero */
+    .showcase-hero {
+      padding: 3rem 0 2.5rem;
+    }
+
+    .showcase-hero h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      background: linear-gradient(125deg, #e4c388 0%, #9daf7f 52%, #c8a96e 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .showcase-hero .lead {
+      color: var(--text-subtle);
+      max-width: 62ch;
+      font-size: 0.95rem;
+    }
+
+    .badge-row {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      border: 1px solid rgba(74, 124, 89, 0.55);
+      color: #c9dccf;
+      background: rgba(74, 124, 89, 0.2);
+      border-radius: 999px;
+      padding: 0.28rem 0.62rem;
+    }
+
+    /* Plugin blocks */
+    .plugin-section {
+      padding: 3.5rem 0;
+      border-top: 1px solid rgba(200, 169, 110, 0.1);
+    }
+
+    .plugin-section h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.75rem, 4vw, 2.6rem);
+      margin-bottom: 0.35rem;
+      color: var(--text-main);
+    }
+
+    .plugin-tag {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: 1rem;
+    }
+
+    .plugin-desc {
+      color: var(--text-subtle);
+      max-width: 65ch;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-bottom: 1.75rem;
+      display: grid;
+      gap: 0.5rem;
+      max-width: 58ch;
+    }
+
+    .feature-list li {
+      position: relative;
+      padding-left: 1.1rem;
+      font-size: 0.88rem;
+      color: var(--text-subtle);
+    }
+
+    .feature-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+      box-shadow: 0 0 8px rgba(74, 124, 89, 0.5);
+    }
+
+    /* Bento gallery — 4 placeholders (sustituir por GIF o capturas) */
+    .gallery-note {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+      margin-bottom: 0.75rem;
+      opacity: 0.85;
+    }
+
+    .plugin-gallery {
+      display: grid;
+      gap: 0.65rem;
+      grid-template-columns: 1.35fr 1fr;
+      grid-template-rows: minmax(140px, 1fr) minmax(140px, 1fr) auto;
+    }
+
+    .plugin-gallery .media {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(200, 169, 110, 0.18);
+      background: linear-gradient(145deg, #151811, #0d0e0c);
+    }
+
+    .plugin-gallery .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.88;
+      transition: opacity var(--ease), transform 600ms ease;
+    }
+
+    .plugin-gallery .media:hover img {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+
+    .plugin-gallery .media span {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 0.5rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-main);
+      background: rgba(10, 10, 8, 0.65);
+      padding: 0.2rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid rgba(200, 169, 110, 0.2);
+    }
+
+    .plugin-gallery .g-a {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      min-height: 280px;
+    }
+
+    .plugin-gallery .g-b {
+      grid-column: 2;
+      grid-row: 1;
+      min-height: 130px;
+    }
+
+    .plugin-gallery .g-c {
+      grid-column: 2;
+      grid-row: 2;
+      min-height: 130px;
+    }
+
+    .plugin-gallery .g-d {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      min-height: 160px;
+    }
+
+    footer.page-foot {
+      padding: 2rem 0 3rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-subtle);
+      border-top: 1px solid rgba(200, 169, 110, 0.12);
+    }
+
+    @media (max-width: 768px) {
+      .plugin-gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+      }
+
+      .plugin-gallery .g-a,
+      .plugin-gallery .g-b,
+      .plugin-gallery .g-c,
+      .plugin-gallery .g-d {
+        grid-column: 1;
+        grid-row: auto;
+        min-height: 180px;
+      }
+
+      .plugin-gallery .g-a {
+        min-height: 220px;
+      }
+
+      .plugin-jump {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .plugin-gallery .media:hover img { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" aria-hidden="true">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.08"/>
+      </feComponentTransfer>
+    </filter>
+  </svg>
+  <div class="noise-layer" aria-hidden="true"></div>
+
+  <header class="page-head">
+    <div class="container page-head-inner">
+      <a href="index.html" class="back-link" aria-label="Volver al portafolio">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Portafolio
+      </a>
+      <nav class="plugin-jump" aria-label="Saltos entre plugins">
+        <a href="#koth">KOTH</a>
+        <a href="#tienda">Tienda</a>
+        <a href="#staff">Staff</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="showcase-hero">
+      <div class="container">
+        <h1>RealmCore · plugins de muestra</h1>
+        <p class="lead">
+          Tres piezas representativas del ecosistema que armé para servidores Paper: PvP competitivo con KOTH, economía enlazada a <strong style="color: var(--text-main); font-weight: 500;">Vault</strong> y <strong style="color: var(--text-main); font-weight: 500;">EssentialsX</strong>, y herramientas de staff con mensajes propios y control fino de inventarios y vanish.
+        </p>
+        <div class="badge-row">
+          <span class="badge">Java · Spigot/Paper</span>
+          <span class="badge">MySQL opcional</span>
+          <span class="badge">Placeholders & hooks</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- KOTH -->
+    <section class="plugin-section" id="koth">
+      <div class="container">
+        <p class="plugin-tag">PvP · eventos</p>
+        <h2>King of the Hill</h2>
+        <p class="plugin-desc">
+          Sistema de captura de zona con temporizador visible para todos, anuncios en chat configurable y recompensas por equipo o jugador. Ideal para rotar eventos sin reiniciar el servidor: defines radio, altura, tiempo de captura y qué pasa si nadie domina la colina al acabar el round.
+        </p>
+        <ul class="feature-list">
+          <li>Múltiples colinas y horarios programados o comando manual para staff.</li>
+          <li>Bordes visibles en mundo (partículas opcionales) y mensajes de estado por capas.</li>
+          <li>Integración con economía y rangos: premios en ítems o comandos ejecutados al ganar.</li>
+          <li>Anti-abuso: cooldown entre capturas y registro de quién estuvo en zona.</li>
+        </ul>
+        <p class="gallery-note">Galería — sustituye estas imágenes por tus capturas o un GIF grabado en el servidor.</p>
+        <div class="plugin-gallery">
+          <div class="media g-a">
+            <img src="https://picsum.photos/seed/rc-koth-a/800/900" width="800" height="900" alt="Vista general del área KOTH" loading="lazy">
+            <span>Vista zona</span>
+          </div>
+          <div class="media g-b">
+            <img src="https://picsum.photos/seed/rc-koth-b/600/400" width="600" height="400" alt="Interfaz o temporizador KOTH" loading="lazy">
+            <span>Timer UI</span>
+          </div>
+          <div class="media g-c">
+            <img src="https://picsum.photos/seed/rc-koth-c/600/400" width="600" height="400" alt="Chat o anuncios del evento" loading="lazy">
+            <span>Anuncios</span>
+          </div>
+          <div class="media g-d">
+            <img src="https://picsum.photos/seed/rc-koth-d/1200/400" width="1200" height="400" alt="Momento de victoria o recompensa" loading="lazy">
+            <span>Recompensa</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tienda -->
+    <section class="plugin-section" id="tienda">
+      <div class="container">
+        <p class="plugin-tag">Economía · GUI</p>
+        <h2>Tienda Vault + EssentialsX</h2>
+        <p class="plugin-desc">
+          Tienda in-game con menús claros y precios en la moneda que ya usas gracias a <strong style="color: var(--text-main); font-weight: 500;">Vault</strong>. Compatible con permisos y kits habituales de <strong style="color: var(--text-main); font-weight: 500;">EssentialsX</strong>: compras que ejecutan comandos, entregan ítems o aplican efectos sin duplicar lógica rara en cada plugin.
+        </p>
+        <ul class="feature-list">
+          <li>Categorías por ítems, comandos o “paquetes” con preview en lore.</li>
+          <li>Sincronización de saldo Vault; mensajes de éxito/error personalizables.</li>
+          <li>Límite de compra por rango Essentials / permiso y ventana de confirmación.</li>
+          <li>Historial simple para staff (quién compró qué, útil contra disputas).</li>
+        </ul>
+        <p class="gallery-note">Misma estructura de galería — aquí puedes poner capturas del GUI, confirmación de compra o un GIF del flujo.</p>
+        <div class="plugin-gallery">
+          <div class="media g-a">
+            <img src="https://picsum.photos/seed/rc-shop-a/800/900" width="800" height="900" alt="Menú principal de la tienda" loading="lazy">
+            <span>Menú principal</span>
+          </div>
+          <div class="media g-b">
+            <img src="https://picsum.photos/seed/rc-shop-b/600/400" width="600" height="400" alt="Categoría de ítems" loading="lazy">
+            <span>Categoría</span>
+          </div>
+          <div class="media g-c">
+            <img src="https://picsum.photos/seed/rc-shop-c/600/400" width="600" height="400" alt="Confirmación de compra" loading="lazy">
+            <span>Confirmar</span>
+          </div>
+          <div class="media g-d">
+            <img src="https://picsum.photos/seed/rc-shop-d/1200/400" width="1200" height="400" alt="Saldo Vault en pantalla" loading="lazy">
+            <span>Saldo Vault</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Staff -->
+    <section class="plugin-section" id="staff">
+      <div class="container">
+        <p class="plugin-tag">Moderación · UX staff</p>
+        <h2>Suite Staff</h2>
+        <p class="plugin-desc">
+          Panel ligero para moderadores: sanciones con <strong style="color: var(--text-main); font-weight: 500;">plantillas editables</strong> (motivos y duraciones predefinidos), acceso guiado a inventario del sancionado, ender chest, y modo <strong style="color: var(--text-main); font-weight: 500;">vanish</strong> que respeta tu jerarquía de permisos. Todo pensado para que el equipo no pierda tiempo escribiendo los mismos párrafos en cada ban.
+        </p>
+        <ul class="feature-list">
+          <li>Plantillas YAML para bans/kicks/mutes; placeholders para jugador, staff y tiempo.</li>
+          <li>Vanish con bloqueo de interacciones opcional y lista de staff que te ve.</li>
+          <li>Inspección de inventario y ender chest en contexto (sin comandos crípticos).</li>
+          <li>Registro de acciones exportable para servidor serio (staff accountability).</li>
+        </ul>
+        <p class="gallery-note">Cuatro huecos para capturas: lista de plantillas, GUI de ban, vanish activo y vista de inventario ajeno.</p>
+        <div class="plugin-gallery">
+          <div class="media g-a">
+            <img src="https://picsum.photos/seed/rc-staff-a/800/900" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy">
+            <span>Plantillas</span>
+          </div>
+          <div class="media g-b">
+            <img src="https://picsum.photos/seed/rc-staff-b/600/400" width="600" height="400" alt="Formulario de ban" loading="lazy">
+            <span>Ban GUI</span>
+          </div>
+          <div class="media g-c">
+            <img src="https://picsum.photos/seed/rc-staff-c/600/400" width="600" height="400" alt="Indicador vanish" loading="lazy">
+            <span>Vanish</span>
+          </div>
+          <div class="media g-d">
+            <img src="https://picsum.photos/seed/rc-staff-d/1200/400" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy">
+            <span>Inv / ender</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <div class="container">
+      <p>Gabriel Murillo · RealmCore muestra · <a href="index.html" style="color: var(--accent-primary); border-bottom: 1px solid rgba(200,169,110,0.35);">Volver al inicio</a></p>
+    </div>
+  </footer>
+</body>
+</html>
