@@ -243,21 +243,11 @@
     }
 
     /* Carrusel + lightbox — añade más <figure class="plugin-carousel__slide"> dentro del track */
-    .gallery-note {
-      font-size: 0.72rem;
-      color: var(--text-subtle);
-      margin-bottom: 0.75rem;
-      opacity: 0.85;
-    }
-
-    .gallery-note code {
-      font-size: 0.68rem;
-      color: var(--accent-primary);
-      word-break: break-word;
-    }
-
     .plugin-carousel {
       margin-top: 0.25rem;
+      max-width: min(100%, 1080px);
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .plugin-carousel__chrome {
@@ -273,10 +263,14 @@
       border: 1px solid rgba(200, 169, 110, 0.2);
       background: linear-gradient(145deg, #151811, #0d0e0c);
       min-height: 0;
+      aspect-ratio: 2 / 1;
+      max-height: min(42vw, 400px);
+      min-height: 200px;
     }
 
     .plugin-carousel__track {
       display: flex;
+      height: 100%;
       transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1);
     }
 
@@ -284,6 +278,7 @@
       flex: 0 0 100%;
       min-width: 0;
       margin: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
     }
@@ -291,6 +286,8 @@
     .plugin-carousel__zoom {
       display: block;
       width: 100%;
+      height: 100%;
+      min-height: 0;
       padding: 0;
       border: none;
       background: transparent;
@@ -300,8 +297,9 @@
 
     .plugin-carousel__zoom img {
       width: 100%;
-      height: clamp(200px, 38vw, 320px);
+      height: 100%;
       object-fit: cover;
+      object-position: center;
       opacity: 0.92;
       transition: opacity var(--ease), transform 500ms ease;
     }
@@ -315,15 +313,6 @@
     .plugin-carousel__zoom:focus-visible {
       outline: 2px solid rgba(200, 169, 110, 0.55);
       outline-offset: 2px;
-    }
-
-    .plugin-carousel__caption {
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-subtle);
-      padding: 0.55rem 0.75rem 0.65rem;
-      border-top: 1px solid rgba(200, 169, 110, 0.1);
     }
 
     .plugin-carousel__arrow {
@@ -595,7 +584,6 @@
           <li>Integración con economía y rangos: premios en ítems o comandos ejecutados al ganar.</li>
           <li>Anti-abuso: cooldown entre capturas y registro de quién estuvo en zona.</li>
         </ul>
-        <p class="gallery-note">Carrusel — haz clic en la foto para ampliarla. Para añadir más imágenes, copia otro bloque <code>&lt;figure class="plugin-carousel__slide"&gt;</code> dentro del <code>.plugin-carousel__track</code> (GIF y PNG/JPG funcionan igual).</p>
         <div class="plugin-carousel" data-carousel>
           <div class="plugin-carousel__chrome">
             <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
@@ -607,25 +595,21 @@
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
                     <img src="https://picsum.photos/seed/rc-koth-a/800/900" width="800" height="900" alt="Vista general del área KOTH" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Vista zona</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
                     <img src="https://picsum.photos/seed/rc-koth-b/600/400" width="600" height="400" alt="Interfaz o temporizador KOTH" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Timer UI</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
                     <img src="https://picsum.photos/seed/rc-koth-c/600/400" width="600" height="400" alt="Chat o anuncios del evento" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Anuncios</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
                     <img src="https://picsum.photos/seed/rc-koth-d/1200/400" width="1200" height="400" alt="Momento de victoria o recompensa" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Recompensa</figcaption>
                 </figure>
               </div>
             </div>
@@ -654,7 +638,6 @@
           <li>Límite de compra por rango Essentials / permiso y ventana de confirmación.</li>
           <li>Historial simple para staff (quién compró qué, útil contra disputas).</li>
         </ul>
-        <p class="gallery-note">Añade o quita <code>&lt;figure class="plugin-carousel__slide"&gt;</code> según necesites; el contador y las flechas se adaptan solos.</p>
         <div class="plugin-carousel" data-carousel>
           <div class="plugin-carousel__chrome">
             <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
@@ -666,25 +649,21 @@
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
                     <img src="https://picsum.photos/seed/rc-shop-a/800/900" width="800" height="900" alt="Menú principal de la tienda" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Menú principal</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
                     <img src="https://picsum.photos/seed/rc-shop-b/600/400" width="600" height="400" alt="Categoría de ítems" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Categoría</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
                     <img src="https://picsum.photos/seed/rc-shop-c/600/400" width="600" height="400" alt="Confirmación de compra" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Confirmar</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
                     <img src="https://picsum.photos/seed/rc-shop-d/1200/400" width="1200" height="400" alt="Saldo Vault en pantalla" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Saldo Vault</figcaption>
                 </figure>
               </div>
             </div>
@@ -713,7 +692,6 @@
           <li>Inspección de inventario y ender chest en contexto (sin comandos crípticos).</li>
           <li>Registro de acciones exportable para servidor serio (staff accountability).</li>
         </ul>
-        <p class="gallery-note">Mismas reglas: tantas diapositivas como quieras dentro de <code>.plugin-carousel__track</code>.</p>
         <div class="plugin-carousel" data-carousel>
           <div class="plugin-carousel__chrome">
             <button type="button" class="plugin-carousel__arrow plugin-carousel__arrow--prev" aria-label="Imagen anterior">
@@ -723,27 +701,58 @@
               <div class="plugin-carousel__track">
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
-                    <img src="https://picsum.photos/seed/rc-staff-a/800/900" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy" decoding="async">
+                    <img src="./img/menu_template.png" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Plantillas</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
-                    <img src="https://picsum.photos/seed/rc-staff-b/600/400" width="600" height="400" alt="Formulario de ban" loading="lazy" decoding="async">
+                    <img src="./img/menu_template2.png" width="600" height="400" alt="Formulario de ban" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Ban GUI</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
-                    <img src="https://picsum.photos/seed/rc-staff-c/600/400" width="600" height="400" alt="Indicador vanish" loading="lazy" decoding="async">
+                    <img src="./img/menu_template3.png" width="600" height="400" alt="Indicador vanish" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Vanish</figcaption>
                 </figure>
                 <figure class="plugin-carousel__slide">
                   <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
-                    <img src="https://picsum.photos/seed/rc-staff-d/1200/400" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy" decoding="async">
+                    <img src="./img/menu_template4.png" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy" decoding="async">
                   </button>
-                  <figcaption class="plugin-carousel__caption">Inv / ender</figcaption>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
+                    <img src="./img/invsee.png" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
+                    <img src="./img/endersee.png" width="600" height="400" alt="Formulario de ban" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 3">
+                    <img src="./img/chat_staff.png" width="600" height="400" alt="Indicador vanish" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 4">
+                    <img src="./img/chat_staff2.png" width="1200" height="400" alt="Inventario ajeno o ender chest" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 1">
+                    <img src="./img/disbanMenu.png" width="800" height="900" alt="Lista de plantillas de sanción" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 2">
+                    <img src="./img/disbanMenu2.png" width="600" height="400" alt="Formulario de ban" loading="lazy" decoding="async">
+                  </button>
+                </figure>
+                <figure class="plugin-carousel__slide">
+                  <button type="button" class="plugin-carousel__zoom" aria-label="Ampliar imagen 11">
+                    <img src="./img/chat_staff3.png" width="600" height="400" alt="Indicador vanish" loading="lazy" decoding="async">
+                  </button>
                 </figure>
               </div>
             </div>
@@ -752,7 +761,7 @@
             </button>
           </div>
           <div class="plugin-carousel__footer">
-            <span class="plugin-carousel__counter" aria-live="polite">1 / 4</span>
+            <span class="plugin-carousel__counter" aria-live="polite">1 / 11</span>
           </div>
         </div>
       </div>
@@ -804,7 +813,7 @@
         return {
           src: (img && (img.getAttribute("src") || img.src)) || "",
           alt: img?.alt || "",
-          caption: cap?.textContent?.trim() || ""
+          caption: cap?.textContent?.trim() || img?.alt || ""
         };
       }
 
@@ -827,6 +836,7 @@
         lightboxImg.src = d.src;
         lightboxImg.alt = d.alt;
         lightboxCap.textContent = d.caption;
+        lightboxCap.style.display = d.caption ? "block" : "none";
       }
 
       let sourceCarousel = null;
